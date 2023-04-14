@@ -60,7 +60,7 @@ st.header("BERT 文本分类")
 text = st.empty()
 show_messages(text)
 
-prompt_context = st.text_input("上下文", value="这里输入...")
+# prompt_context = st.text_input("上下文", value="这里输入...")
 st.text( '''
         LABEL_0 民生 故事 
         LABEL_1 文化 文化 
@@ -79,22 +79,22 @@ st.text( '''
         LABEL_16 电竞 游戏
         '''
 )
-# prompt_question = st.text_input("关于上下文的问题", value="这里输入...")
+prompt_question = st.text_input("上下文", value="这里输入...")
 
 if st.button("发送"):
     with st.spinner("生成回复..."):
-        st.session_state["messages"] += [{"role": "user", "content": prompt_context+'\n'+prompt_question}]
+        st.session_state["messages"] += [{"role": "user", "content": prompt_question}]
         # response = openai.ChatCompletion.create(
         #     model="gpt-3.5-turbo", messages=st.session_state["messages"]
         # )
         # message_response = response["choices"][0]["message"]["content"]
-        message_response = classifier("只要关羽不捣乱，峡谷4V5也不怕？")
+        message_response = classifier(prompt_question)
         # message_response = nlp({
         #                         'question':prompt_question,
         #                          'context': prompt_context
         #                     })
         st.session_state["messages"] += [
-            {"role": "system", "content": message_response['label']+"分数: "+str(message_response['score'])}
+            {"role": "system", "content": str(message_response)}#['label']+"分数: "+str(message_response['score'])}
         ]
         show_messages(text)
         # st.text()
